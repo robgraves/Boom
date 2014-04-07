@@ -115,8 +115,8 @@ class States:
                     self.select_option(i)
                     break
                     
-    def make_text(self,message,color,center,size):
-        font = Font.load('godfather.ttf', size)
+    def make_text(self,message,color,center,size, fonttype='godfather.ttf'):
+        font = Font.load(fonttype, size)
         text = font.render(message,True,color)
         rect = text.get_rect(center=center)
         return text,rect
