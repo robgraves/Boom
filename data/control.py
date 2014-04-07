@@ -1,12 +1,16 @@
+
 import os
 import pygame as pg
-from .states import menu
+from .states import menu, splash, viewer
 
 class Control():
-    def __init__(self, fullscreen, size):
+    def __init__(self, fullscreen, difficulty, size):
+        pg.mixer.pre_init(44100, -16, 1, 512)
         pg.init()
         pg.display.set_caption("Boom")
         self.screensize = (int(size[0]), int(size[1]))
+        #self.screensize = (int(size.split('x')[0]), int(size.split('x')[1]))
+        #self.screensize = (800,600)
         if fullscreen:
             self.screen = pg.display.set_mode(self.screensize, pg.FULLSCREEN)
         else:
@@ -18,11 +22,14 @@ class Control():
         self.keys = pg.key.get_pressed()
         self.done = False
         self.state_dict = {
-            "MENU" : menu.Menu(self.screen_rect),
+            "MENU"     : menu.Menu(self.screen_rect),
+            "SPLASH"   : splash.Splash(self.screen_rect),
+            'CARDVIEW' : viewer.Viewer(self.screen_rect),
         }
-        self.state_name = "MENU"
+
+        self.state_name = "SPLASH"
         self.state = self.state_dict[self.state_name]
-        
+
 
     def event_loop(self):
         for event in pg.event.get():
@@ -39,7 +46,7 @@ class Control():
             self.state.done = False
             self.state = self.state_dict[self.state_name]
             self.state.entry()
-            
+
 
     def run(self):
         while not self.done:
@@ -52,4 +59,5 @@ class Control():
             self.state.render(self.screen)
             pg.display.update()
             self.clock.tick(self.fps)
+
 
